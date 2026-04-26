@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tic-Tac-Toe Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="splash-logo">#</div>
+        <h1 class="splash-title">PRO TIC TAC</h1>
+        <p class="splash-sub">Loading...</p>
+    </div>
+
+    <div id="toast"></div>
+
+    <div id="app">
+
+        <div id="win-overlay">
+            <div class="win-box">
+                <div id="win-icon">🏆</div>
+                <h2 id="win-msg">Winner!</h2>
+                <p id="win-sub">Great game!</p>
+                <button onclick="startGame(currentMode)" class="btn-primary">Play Again</button>
+                <button onclick="showScreen('view-mode')" class="btn-text">Change Mode</button>
+            </div>
+        </div>
+
+        <div id="content">
+
+            <div id="view-auth" class="screen center-screen">
+                <div class="logo-wrap">
+                    <div class="big-logo">#</div>
+                </div>
+                <h1 class="app-title">PRO TIC TAC</h1>
+                <p class="app-sub">Elite Multiplayer Arena</p>
+                <div class="stack">
+                    <button id="btn-goto-login" onclick="showScreen('view-login')" class="btn-primary">Sign In</button>
+                    <button id="btn-goto-reg" onclick="showScreen('view-register')" class="btn-outline">Create Account</button>
+                    <button id="btn-guest" onclick="playAsGuest()" class="btn-text">Continue as Guest</button>
+                </div>
+            </div>
+
+            <div id="view-login" class="screen form-screen">
+                <div class="form-header">
+                    <button onclick="showScreen('view-auth')" class="back-btn">&#8592;</button>
+                    <h2>Sign In</h2>
+                </div>
+                <p class="form-hint">Welcome back</p>
+                <label for="log-u">Username</label>
+                <input id="log-u" type="text" placeholder="Enter username" autocomplete="username">
+                <label for="log-p">Password</label>
+                <input id="log-p" type="password" placeholder="Enter password" autocomplete="current-password">
+                <button id="btn-login" onclick="doLogin()" class="btn-primary mt">Sign In</button>
+            </div>
+
+            <div id="view-register" class="screen form-screen">
+                <div class="form-header">
+                    <button onclick="showScreen('view-auth')" class="back-btn">&#8592;</button>
+                    <h2>Create Account</h2>
+                </div>
+                <p class="form-hint">Join the arena</p>
+                <label for="reg-u">Username</label>
+                <input id="reg-u" type="text" placeholder="Choose username" autocomplete="username">
+                <label for="reg-p">Password</label>
+                <input id="reg-p" type="password" placeholder="Set password" autocomplete="new-password">
+                <button id="btn-register" onclick="doRegister()" class="btn-primary mt">Register</button>
+            </div>
+
+            <div id="view-home" class="screen">
+                <div class="home-header">
+                    <div>
+                        <p class="role-tag" id="home-role">Guest User</p>
+                        <h2 class="home-name">Hey, <span id="home-name">Guest</span> 👋</h2>
+                    </div>
+                    <div class="trophy-box">🏆</div>
+                </div>
+                <div class="cta-card">
+                    <h3>Ready to Play?</h3>
+                    <p id="home-access">Limited Guest Access</p>
+                    <button id="btn-start" onclick="showScreen('view-mode')" class="btn-primary">START GAME</button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box"><p>Wins</p><h4 id="s-wins">0</h4></div>
+                    <div class="stat-box"><p>Losses</p><h4 id="s-losses">0</h4></div>
+                    <div class="stat-box"><p>Draws</p><h4 id="s-draws">0</h4></div>
+                    <div class="stat-box"><p>Rank</p><h4 id="s-rank">N/A</h4></div>
+                </div>
+            </div>
+
+            <div id="view-mode" class="screen">
+                <h2 class="section-title">Choose Mode</h2>
+                <div class="mode-list">
+                    <div id="mode-pvp" onclick="startGame('pvp')" class="mode-card">
+                        <span class="mode-emoji">👥</span>
+                        <div>
+                            <h4>Vs Friend</h4>
+                            <p>Same Device</p>
+                        </div>
+                    </div>
+                    <div id="mode-bot" onclick="startGame('bot')" class="mode-card">
+                        <span class="mode-emoji">🤖</span>
+                        <div>
+                            <h4>Vs Robot</h4>
+                            <p>Smart AI</p>
+                        </div>
+                    </div>
+                    <div id="mode-locked" class="mode-card locked">
+                        <span class="mode-emoji">🔒</span>
+                        <div>
+                            <h4>Vs Robot</h4>
+                            <p class="locked-label">Sign in to unlock</p>
+                        </div>
+                    </div>
+                </div>
+                <p id="guest-warn" class="guest-warn">Sign in to unlock AI mode and stats</p>
+            </div>
+
+            <div id="view-game" class="screen">
+                <div class="game-top">
+                    <button onclick="showScreen('view-mode')" class="icon-btn">&#8592;</button>
+                    <div id="turn-badge" class="turn-badge">X's TURN</div>
+                    <button onclick="startGame(currentMode)" class="icon-btn">&#8635;</button>
+                </div>
+                <div class="score-row">
+                    <div class="score-item x-col"><span class="sl">X</span><span class="sv" id="sc-x">0</span></div>
+                    <div class="score-item d-col"><span class="sl">DRAW</span><span class="sv" id="sc-d">0</span></div>
+                    <div class="score-item o-col"><span class="sl">O</span><span class="sv" id="sc-o">0</span></div>
+                </div>
+                <div class="board">
+                    <div class="cell" id="c0" onclick="makeMove(0)"></div>
+                    <div class="cell" id="c1" onclick="makeMove(1)"></div>
+                    <div class="cell" id="c2" onclick="makeMove(2)"></div>
+                    <div class="cell" id="c3" onclick="makeMove(3)"></div>
+                    <div class="cell" id="c4" onclick="makeMove(4)"></div>
+                    <div class="cell" id="c5" onclick="makeMove(5)"></div>
+                    <div class="cell" id="c6" onclick="makeMove(6)"></div>
+                    <div class="cell" id="c7" onclick="makeMove(7)"></div>
+                    <div class="cell" id="c8" onclick="makeMove(8)"></div>
+                </div>
+                <button onclick="showScreen('view-mode')" class="btn-danger mt" id="btn-exit">GIVE UP / EXIT</button>
+            </div>
+
+            <div id="view-profile" class="screen">
+                <div class="avatar-box">👤</div>
+                <h2 id="p-name" class="p-name">Guest</h2>
+                <p id="p-type" class="p-type">Guest Account</p>
+                <div class="stats-grid three-col">
+                    <div class="stat-box"><p>Wins</p><h4 id="p-wins">0</h4></div>
+                    <div class="stat-box"><p>Draws</p><h4 id="p-draws">0</h4></div>
+                    <div class="stat-box"><p>Games</p><h4 id="p-total">0</h4></div>
+                </div>
+                <button id="btn-logout" onclick="doLogout()" class="btn-danger mt">SIGN OUT</button>
+            </div>
+
+        </div>
+
+        <nav id="nav-bar">
+            <div id="nav-home" class="nav-item" onclick="showScreen('view-home')">
+                <span>🏠</span><span>Home</span>
+            </div>
+            <div id="nav-mode" class="nav-item" onclick="showScreen('view-mode')">
+                <span>🎮</span><span>Play</span>
+            </div>
+            <div id="nav-profile" class="nav-item" onclick="showScreen('view-profile')">
+                <span>👤</span><span>Profile</span>
+            </div>
+        </nav>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
