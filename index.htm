@@ -3,21 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tic-Tac-Toe Pro</title>
+    <title>Pro Tic-Tac-Toe</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- SPLASH -->
     <div id="splash-screen">
         <div class="splash-logo">#</div>
         <h1 class="splash-title">PRO TIC TAC</h1>
         <p class="splash-sub">Loading...</p>
     </div>
 
+    <!-- TOAST -->
     <div id="toast"></div>
 
+    <!-- ===== SPOTLIGHT TOUR SYSTEM ===== -->
+    <!-- Dark overlay with a transparent "hole" cut-out -->
+    <div id="tour-overlay"></div>
+    <!-- The glowing ring around the highlighted element -->
+    <div id="tour-spotlight"></div>
+    <!-- Tooltip card -->
+    <div id="tour-card">
+        <div class="tour-card-inner">
+            <div class="tc-top-row">
+                <div class="tc-step-label" id="tc-step-label">1 / 9</div>
+                <button class="tc-x-btn" id="tc-skip-btn" onclick="endTour()">✕ Skip</button>
+            </div>
+            <div class="tc-progress-track" id="tc-progress-track">
+                <!-- dots injected by JS -->
+            </div>
+            <div class="tc-emoji" id="tc-emoji">👋</div>
+            <h3 class="tc-title" id="tc-title">Welcome!</h3>
+            <p class="tc-desc" id="tc-desc">Description goes here.</p>
+            <div class="tc-actions">
+                <button class="tc-back-btn" id="tc-back-btn" onclick="tourBack()">← Back</button>
+                <button class="tc-next-btn" id="tc-next-btn" onclick="tourNext()">Next →</button>
+            </div>
+        </div>
+        <!-- Arrow pointer (direction set by JS) -->
+        <div class="tc-arrow" id="tc-arrow"></div>
+    </div>
+
+    <!-- ===== GUIDE MODAL ===== -->
+    <div id="guide-modal">
+        <div class="guide-backdrop" onclick="closeGuide()"></div>
+        <div class="guide-box">
+            <div class="guide-header">
+                <h2>📖 Game Guide</h2>
+                <button class="guide-close" onclick="closeGuide()">✕</button>
+            </div>
+            <div class="guide-body">
+                <div class="guide-item">
+                    <div class="gi-icon">🔐</div>
+                    <div>
+                        <h4>Sign In / Create Account</h4>
+                        <p>Register a free account to permanently save your wins, losses and draws. Or play as a Guest — no signup needed!</p>
+                    </div>
+                </div>
+                <div class="guide-item">
+                    <div class="gi-icon">🎮</div>
+                    <div>
+                        <h4>Choose a Game Mode</h4>
+                        <p><b>👥 Vs Friend</b> — Play against a friend on the same device.<br><b>🤖 Vs Robot</b> — Challenge the smart AI (sign in to unlock).</p>
+                    </div>
+                </div>
+                <div class="guide-item">
+                    <div class="gi-icon">⭕</div>
+                    <div>
+                        <h4>How to Play</h4>
+                        <p>X and O take turns tapping empty cells on the 3×3 board. Place your mark — whoever gets 3 in a row first wins!</p>
+                    </div>
+                </div>
+                <div class="guide-item">
+                    <div class="gi-icon">🏆</div>
+                    <div>
+                        <h4>Winning Condition</h4>
+                        <p>Get 3 of your marks in a row — horizontal, vertical, or diagonal. Fill all cells with no winner? It's a draw!</p>
+                    </div>
+                </div>
+                <div class="guide-item">
+                    <div class="gi-icon">📊</div>
+                    <div>
+                        <h4>Stats &amp; Profile</h4>
+                        <p>When signed in, your Wins, Losses and Draws are saved. Check your Profile tab to view your history and rank.</p>
+                    </div>
+                </div>
+                <div class="guide-item">
+                    <div class="gi-icon">🔄</div>
+                    <div>
+                        <h4>Restart &amp; Exit</h4>
+                        <p>Tap ↺ at the top of the game screen to restart. Tap "GIVE UP / EXIT" to return to the Mode selection screen.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-primary guide-done-btn" onclick="closeGuide()">Got it! ✓</button>
+        </div>
+    </div>
+
+    <!-- ===== APP SHELL ===== -->
     <div id="app">
 
+        <!-- WIN OVERLAY -->
         <div id="win-overlay">
             <div class="win-box">
                 <div id="win-icon">🏆</div>
@@ -30,6 +117,7 @@
 
         <div id="content">
 
+            <!-- AUTH SCREEN -->
             <div id="view-auth" class="screen center-screen">
                 <div class="logo-wrap">
                     <div class="big-logo">#</div>
@@ -43,6 +131,7 @@
                 </div>
             </div>
 
+            <!-- LOGIN SCREEN -->
             <div id="view-login" class="screen form-screen">
                 <div class="form-header">
                     <button onclick="showScreen('view-auth')" class="back-btn">&#8592;</button>
@@ -56,6 +145,7 @@
                 <button id="btn-login" onclick="doLogin()" class="btn-primary mt">Sign In</button>
             </div>
 
+            <!-- REGISTER SCREEN -->
             <div id="view-register" class="screen form-screen">
                 <div class="form-header">
                     <button onclick="showScreen('view-auth')" class="back-btn">&#8592;</button>
@@ -69,6 +159,7 @@
                 <button id="btn-register" onclick="doRegister()" class="btn-primary mt">Register</button>
             </div>
 
+            <!-- HOME SCREEN -->
             <div id="view-home" class="screen">
                 <div class="home-header">
                     <div>
@@ -77,12 +168,12 @@
                     </div>
                     <div class="trophy-box">🏆</div>
                 </div>
-                <div class="cta-card">
+                <div class="cta-card" id="cta-card">
                     <h3>Ready to Play?</h3>
                     <p id="home-access">Limited Guest Access</p>
                     <button id="btn-start" onclick="showScreen('view-mode')" class="btn-primary">START GAME</button>
                 </div>
-                <div class="stats-grid">
+                <div class="stats-grid" id="home-stats-grid">
                     <div class="stat-box"><p>Wins</p><h4 id="s-wins">0</h4></div>
                     <div class="stat-box"><p>Losses</p><h4 id="s-losses">0</h4></div>
                     <div class="stat-box"><p>Draws</p><h4 id="s-draws">0</h4></div>
@@ -90,6 +181,7 @@
                 </div>
             </div>
 
+            <!-- MODE SCREEN -->
             <div id="view-mode" class="screen">
                 <h2 class="section-title">Choose Mode</h2>
                 <div class="mode-list">
@@ -118,18 +210,19 @@
                 <p id="guest-warn" class="guest-warn">Sign in to unlock AI mode and stats</p>
             </div>
 
+            <!-- GAME SCREEN -->
             <div id="view-game" class="screen">
                 <div class="game-top">
-                    <button onclick="showScreen('view-mode')" class="icon-btn">&#8592;</button>
+                    <button id="btn-back-mode" onclick="showScreen('view-mode')" class="icon-btn">&#8592;</button>
                     <div id="turn-badge" class="turn-badge">X's TURN</div>
-                    <button onclick="startGame(currentMode)" class="icon-btn">&#8635;</button>
+                    <button id="btn-restart" onclick="startGame(currentMode)" class="icon-btn">&#8635;</button>
                 </div>
                 <div class="score-row">
                     <div class="score-item x-col"><span class="sl">X</span><span class="sv" id="sc-x">0</span></div>
                     <div class="score-item d-col"><span class="sl">DRAW</span><span class="sv" id="sc-d">0</span></div>
                     <div class="score-item o-col"><span class="sl">O</span><span class="sv" id="sc-o">0</span></div>
                 </div>
-                <div class="board">
+                <div class="board" id="game-board">
                     <div class="cell" id="c0" onclick="makeMove(0)"></div>
                     <div class="cell" id="c1" onclick="makeMove(1)"></div>
                     <div class="cell" id="c2" onclick="makeMove(2)"></div>
@@ -143,6 +236,7 @@
                 <button onclick="showScreen('view-mode')" class="btn-danger mt" id="btn-exit">GIVE UP / EXIT</button>
             </div>
 
+            <!-- PROFILE SCREEN -->
             <div id="view-profile" class="screen">
                 <div class="avatar-box">👤</div>
                 <h2 id="p-name" class="p-name">Guest</h2>
@@ -157,6 +251,7 @@
 
         </div>
 
+        <!-- BOTTOM NAV -->
         <nav id="nav-bar">
             <div id="nav-home" class="nav-item" onclick="showScreen('view-home')">
                 <span>🏠</span><span>Home</span>
@@ -166,6 +261,9 @@
             </div>
             <div id="nav-profile" class="nav-item" onclick="showScreen('view-profile')">
                 <span>👤</span><span>Profile</span>
+            </div>
+            <div id="nav-guide" class="nav-item" onclick="openGuide()">
+                <span>📖</span><span>Guide</span>
             </div>
         </nav>
 
